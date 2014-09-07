@@ -14,6 +14,14 @@ Tested and developed on Civilization V for Windows
 * hold fist and move left, right, up and down to move camera/map
 * hold fist and turn cw and ccw to zoom
 
+##2048
+Tested and developed on 2048 in google chrome for Windows
+
+**Controls**
+* Move up down left and right to move
+* thumbToPinky toggle unlock
+* fist to reset zero/dead zone
+
 ##SolidWorks Controller
 Tested and developed on SolidWorks 2014 for Windows
 
