@@ -10,7 +10,9 @@ Tested on Windows
 * -fingersSpread Command to map to fingersSpread
 * -fist Command to map to fist
 * -h displays help
+
 example: python generateScript.py -o Chrome.lua -title "Google Chrome" -waveOut a -waveIn b -fist c -fingersSpread d 
+
 The above will generate a script based on the default template mapping the a,b,c,d keyboard keys to gestures when Google Chrome is active
 
 **Notes**
