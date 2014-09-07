@@ -3,6 +3,9 @@ MyoScripts
 
 A collection of lua scripts for use with Myo
 
+##ScriptGeneratorPython
+A Simple Python script to generate lua scripts. See readme inside folder for detail
+
 ##Civilization V Map Control
 Tested and developed on Civilization V for Windows
 
