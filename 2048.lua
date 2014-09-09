@@ -32,12 +32,6 @@ function conditionalPitch(pitch)
     end
     return pitch
 end
-function conditionalRoll(roll)
-    if myo.getXDirection()== "towardElbow" then
-        roll=-roll;
-    end
-    return roll
-end
 function conditionallySwapWave(pose)
     if myo.getArm() == "left" then
         if pose == "waveIn" then
@@ -71,7 +65,6 @@ end
 function unlock()
     yawReference = getMyoYawDegrees()
     pitchReference = getMyoPitchDegrees()
-    rollReference = getMyoRollDegrees()
     enabled = true
     myo.vibrate("short")
     myo.vibrate("short")
@@ -85,7 +78,6 @@ function onPoseEdge(pose, edge)
         --moveActive = edge == "on"
         yawReference = getMyoYawDegrees()
         pitchReference = getMyoPitchDegrees()
-        rollReference = getMyoRollDegrees()
         moveSince = now
        end
     --Other shortcut control
@@ -143,7 +135,6 @@ function onForegroundWindowChange(app, title)
     movePitchLatch=false
     yawReference = getMyoYawDegrees()
     pitchReference = getMyoPitchDegrees()
-    rollReference = getMyoRollDegrees()
     moveSince = now
     
     if string.match(title, "2048") then
