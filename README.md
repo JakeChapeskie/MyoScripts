@@ -7,15 +7,7 @@ A collection of lua scripts for use with Myo
 A Simple Python script to generate lua scripts. See readme inside folder for detail
 
 ##Civilization V Map Control
-Tested and developed on Civilization V for Windows
-
-**Controls**
-* waveIn reset to Next Unit
-* waveOut reset to Previous Unit
-* fingersSpread Do Nothing
-* thumbToPinky toggle unlock
-* hold fist and move left, right, up and down to move camera/map
-* hold fist and turn cw and ccw to zoom
+Old and outdated, see live version https://market.myo.com/app/5474d1e3e4b0361138df2aa5/civilization-v-connector
 
 ##2048
 Tested and developed on 2048 in google chrome for Windows
