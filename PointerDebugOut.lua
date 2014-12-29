@@ -1,15 +1,23 @@
-scriptId = 'com.thalmic.pointer'
+scriptId = 'com.jakechapeskie.pointer'
+
+minMyoConnectVersion ='0.8.0'
+scriptDetailsUrl = 'https://github.com/JakeChapeskie/MyoScripts'
+scriptTitle = 'Pointer Connector'
+myo.debug("Hold a fist and move around to see debug output")
 function onForegroundWindowChange(app, title)
 	return true
 end
+
 function getMyoYawDegrees()
- local yawValue = math.deg(myo.getYaw())
-   return yawValue
+	local yawValue = math.deg(myo.getYaw())
+	return yawValue
 end
+
 function getMyoPitchDegrees()
- local PitchValue = math.deg(myo.getPitch())
-   return PitchValue
+	local PitchValue = math.deg(myo.getPitch())
+	return PitchValue
 end
+
 function degreeDiff(value, base)
     local diff = value - base
 
@@ -21,23 +29,20 @@ function degreeDiff(value, base)
 
     return diff
 end
-function conditionalPitch(pitch)
-	if myo.getXDirection()== "towardElbow" then
-		pitch=-pitch;
-	end
-	return pitch
-end
 
 PITCH_MOTION_THRESHOLD = 7 -- degrees
 YAW_MOTION_THRESHOLD = 7 -- degrees
 
+-- Set how the Myo Armband handles locking
+myo.setLockingPolicy("none")
+
 function onPeriodic()
 
- local now = myo.getTimeMilliseconds()
+	local now = myo.getTimeMilliseconds()
 		if moveActive then
         local relativeYaw = degreeDiff(getMyoYawDegrees(), yawReference)
 		if math.abs(relativeYaw)> YAW_MOTION_THRESHOLD then
-			if relativeYaw>0 then
+			if relativeYaw < 0 then
 				myo.debug("left")
 			else
 				myo.debug("right")
@@ -45,9 +50,7 @@ function onPeriodic()
 		end
 		local relativePitch = degreeDiff(getMyoPitchDegrees(), pitchReference)
 		if math.abs(relativePitch)> PITCH_MOTION_THRESHOLD then
-			myo.debug("ARM dir:"..myo.getXDirection())
-			relativePitch=conditionalPitch(relativePitch)
-			if relativePitch>0 then
+			if relativePitch < 0 then
 				myo.debug("DOWN")
 				
 			else
@@ -69,12 +72,13 @@ function onActiveChange(isActive)
 end
 
 function onPoseEdge(pose, edge)
+	--myo.debug(pose)
 	local now = myo.getTimeMilliseconds()
-	if pose == "fist" or  pose == "thumbToPinky" then
+	if pose == "fist" then
+			myo.debug("RESET")
             moveActive = edge == "on"
             yawReference = getMyoYawDegrees()
 			pitchReference=getMyoPitchDegrees()
             moveSince = now
-            --extendUnlock()
     end
 end
