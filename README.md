@@ -36,7 +36,7 @@ An Improved SolidWorks Controller using the Mouse control.  Tested and developed
 * waveIn: hold to zoom while moving arm
 * waveOut: hold to move while moving arm
 * fingersSpread: hold to rotate
-* thumbToPinky: toggle unlock
+* doubleTap: toggle unlock
 * fist: hold or mak to left click
 
 ##Pointer Debug Out
