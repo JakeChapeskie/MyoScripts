@@ -72,9 +72,9 @@ function onPeriodic()
         if math.abs(relativeRoll)> ROLL_MOTION_THRESHOLD then
             if now - moveSince > SLOW_MOVE_PERIOD then
                 if relativeRoll>0 then
-                    myo.mediaKey("volume_down")
-                else
                     myo.mediaKey("volume_up")
+                else
+                    myo.mediaKey("volume_down")
                 end    
                 moveSince = now
             end
