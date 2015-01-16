@@ -12,7 +12,7 @@ enabled=false
 myo.setLockingPolicy("standard")
 
 function onForegroundWindowChange(app, title)
-	return true
+    return true
 end
 
 function getMyoRollDegrees()
@@ -20,7 +20,7 @@ function getMyoRollDegrees()
     return RollValue
 end
 function onUnlock()
-	enabled=false
+    enabled=false
 end
 function degreeDiff(value, base)
     local diff = value - base
@@ -33,42 +33,52 @@ function degreeDiff(value, base)
 
     return diff
 end
+function conditionallySwapWave(pose)
+    if myo.getArm() == "left" then
+        if pose == "waveIn" then
+            pose = "waveOut"
+        elseif pose == "waveOut" then
+            pose = "waveIn"
+        end
+    end
+    return pose
+end
 function onPoseEdge(pose, edge)
-    --pose=conditionallySwapWave(pose)
+    pose=conditionallySwapWave(pose)
     local now = myo.getTimeMilliseconds()
     --Hold to activate
     if edge == "on" then
-	    if pose == "fist" then
-	        moveActive = edge == "on"
-	        rollReference = getMyoRollDegrees()
-	        moveSince = now
-	        enabled=true
-	    elseif pose =="waveIn" then
-	    	myo.mediaKey("previous")
-	    elseif pose =="waveOut" then
-			myo.mediaKey("next")
-	    elseif pose =="fingersSpread" then
-	    	myo.mediaKey("play_pause")
-	    else
-	    	enabled=false
-	    end
-	end
+        if pose == "fist" then
+            moveActive = edge == "on"
+            rollReference = getMyoRollDegrees()
+            moveSince = now
+            enabled=true
+        elseif pose =="waveIn" then
+            myo.mediaKey("previous")
+        elseif pose =="waveOut" then
+            myo.mediaKey("next")
+        elseif pose =="fingersSpread" then
+            myo.mediaKey("play_pause")
+        else
+            enabled=false
+        end
+    end
 end
 
 function onPeriodic()
-	local now = myo.getTimeMilliseconds()
-	if (myo.isUnlocked()) and enabled then
-		local relativeRoll = degreeDiff(getMyoRollDegrees(), rollReference)
-	    if math.abs(relativeRoll)> ROLL_MOTION_THRESHOLD then
-	        if now - moveSince > SLOW_MOVE_PERIOD then
-	            if relativeRoll>0 then
-	                myo.mediaKey("volume_down")
-	            else
-	                myo.mediaKey("volume_up")
-	            end    
-	            moveSince = now
-	        end
-	    end
-	end
+    local now = myo.getTimeMilliseconds()
+    if (myo.isUnlocked()) and enabled then
+        local relativeRoll = degreeDiff(getMyoRollDegrees(), rollReference)
+        if math.abs(relativeRoll)> ROLL_MOTION_THRESHOLD then
+            if now - moveSince > SLOW_MOVE_PERIOD then
+                if relativeRoll>0 then
+                    myo.mediaKey("volume_down")
+                else
+                    myo.mediaKey("volume_up")
+                end    
+                moveSince = now
+            end
+        end
+    end
 end
 
