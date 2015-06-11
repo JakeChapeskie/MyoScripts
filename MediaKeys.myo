@@ -1,18 +1,23 @@
 scriptId = 'com.jakechapeskie.media'
 
 minMyoConnectVersion ='0.8.1'
-scriptDetailsUrl = 'https://github.com/JakeChapeskie/MyoScripts'
-scriptTitle = 'Media Keys'
+scriptDetailsUrl = 'https://market.myo.com/app/54eb721ee4b07a1270f42ca2'
+scriptTitle = 'Global Media Keys'
 
 ROLL_MOTION_THRESHOLD = 7 -- degrees
 SLOW_MOVE_PERIOD = 20
+ROLL_INTERVAL = 5
 rollReference=0
-moveSince=0
+rolls = 0
 enabled=false
 myo.setLockingPolicy("standard")
 
 function onForegroundWindowChange(app, title)
     return true
+end
+
+function activeAppName()
+    return scriptTitle
 end
 
 function getMyoRollDegrees()
@@ -46,12 +51,17 @@ end
 function onPoseEdge(pose, edge)
     pose=conditionallySwapWave(pose)
     local now = myo.getTimeMilliseconds()
+  
+    if (pose ~= "rest" and pose ~= "unknown") then
+        -- hold if edge is on, timed if edge is off
+        myo.unlock(edge == "off" and "timed" or "hold")
+    end
     --Hold to activate
     if edge == "on" then
         if pose == "fist" then
             moveActive = edge == "on"
             rollReference = getMyoRollDegrees()
-            moveSince = now
+            rolls = 0
             enabled=true
         elseif pose =="waveIn" then
             myo.mediaKey("previous")
@@ -66,19 +76,18 @@ function onPoseEdge(pose, edge)
 end
 
 function onPeriodic()
-    local now = myo.getTimeMilliseconds()
-    if (myo.isUnlocked()) and enabled then
+    if (enabled) then
         local relativeRoll = degreeDiff(getMyoRollDegrees(), rollReference)
-        if math.abs(relativeRoll)> ROLL_MOTION_THRESHOLD then
-            if now - moveSince > SLOW_MOVE_PERIOD then
-                if relativeRoll>0 then
-                    myo.mediaKey("volume_up")
-                else
-                    myo.mediaKey("volume_down")
-                end    
-                moveSince = now
+        local newRolls = math.floor(relativeRoll / ROLL_INTERVAL)
+        local volumeKey = newRolls < rolls and "volume_down" or "volume_up"
+        local deltaRolls = math.abs(newRolls - rolls)
+
+        if (deltaRolls > 0) then
+            for i=1,deltaRolls do
+                myo.mediaKey(volumeKey);
             end
         end
+        rolls = newRolls
     end
 end
 
